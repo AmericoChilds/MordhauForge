@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <link rel="stylesheet" href="./importMap.css">
+    </head>
+
+        <body>
+            <container id="jimmyjohns">
+                <div id="errorDiv">
+                    <h2 id="errorMessage"></h2>
+                </div>
+                <div id="DestDiv">
+                    <b>Mordhau Folder:</b> </br>
+                    <b id="destinationString"></b> </br>
+                    <input type="button" id="btn-choosedest" value="Browse" /> </br> </br>
+                </div>
+                <div id="DestDiv">
+                    <b>Zipped folder location:</b> </br>
+                    <b id="mapLocation"></b></br>
+                    <input type="button" id="btn-choosemap" value="Browse" /> </br> </br>
+                </div>
+            </container>
+
+            <input type="button" id="btn-install" value="Install" /> </br>
+        </body>
+        <script>
+
+            const electron = require("electron")
+            const {dialog} = electron.remote;
+
+            const fs = require("fs");
+            const unzipper = require("unzipper");
+            // Strings for utilization
+            var contentFolder = "\\Mordhau\\Content\\Mordhau";
+            var mordhaudir = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Mordhau";
+            var filedir = undefined;
+            // Update Functions
+            function updateDestination() {
+                document.getElementById("destinationString").innerHTML = mordhaudir;
+            }
+
+            function updateMapLocation() {
+                var i = filedir;
+
+                if( i == undefined ) {
+                    i = "Please select a zipped map folder";
+                }
+
+                document.getElementById("mapLocation").innerHTML = i;
+            }
+            // Utility
+            function sendError(t) {
+                if( t == "noLocation" ) {
+                    document.getElementById("errorMessage").innerHTML = "ERROR: Please select a zipped map folder";
+                } else if( t == "destFolder" ) {
+                    document.getElementById("errorMessage").innerHTML = "ERROR: Couldn't locate Mordhau folder";
+                }
+            }
+            
+            // Initialiation
+            updateDestination();
+            updateMapLocation();
+
+            document.getElementById("btn-choosedest").addEventListener("click", () => {
+
+                dialog.showOpenDialog({ properties: ['openDirectory'] }, function(dir) {
+                    if( dir != undefined ) {
+                        mordhaudir = dir[0];
+                    }
+                    console.log(mordhaudir);
+                    updateDestination();
+                });
+
+            }, false);
+
+            document.getElementById("btn-choosemap").addEventListener("click", () => {
+
+                dialog.showOpenDialog({ filters: [ { name: "Zipped Maps", extensions: ['zip'] } ] }, function(dir) {
+                    if( dir != undefined ) {
+                        filedir = dir[0];
+                    }
+                    console.log(mordhaudir);
+                    updateMapLocation();
+                });
+
+            }, false);
+
+            document.getElementById("btn-install").addEventListener("click", () => {
+
+                if( filedir == undefined ) {
+                    sendError("noLocation");
+                } else if( !(fs.existsSync(mordhaudir)) ) {
+                    sendError("destFolder");    
+                } else {
+                    var ext =  filedir.substring(filedir.length - 3);
+                    if ( ext == "zip" ) {
+                        fs.createReadStream(filedir).pipe(unzipper.Extract({ path: mordhaudir }));
+                    }
+                }
+
+            }, false);
+            
+        </script>
+
+</html>

@@ -1,0 +1,34 @@
+element.style {
+    background: #474747;
+}
+
+body {
+    align-items: center;
+    justify-content: center;
+
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    color: #ffff;
+}
+
+#app-title {
+    background: #272727;
+    color: #ffffff;
+}
+
+#errorDiv {
+    background: #FF8C8C;
+}
+
+#DestDiv{
+    background: #343434;
+    margin: 5px;
+}
+
+#destinationString {
+    background: #5B5B5B;
+}
+
+#mapLocation {
+    background: #5B5B5B;
+}

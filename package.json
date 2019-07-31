@@ -1,0 +1,16 @@
+{
+  "name": "mordhau_mi",
+  "version": "1.0.0",
+  "description": "",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron ."
+  },
+  "author": "NovusNova",
+  "license": "MIT",
+  "dependencies": {
+    "download": "^7.1.0",
+    "electron": "^5.0.7",
+    "unzipper": "^0.10.1"
+  }
+}

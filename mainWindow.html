@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <link rel="stylesheet" href="./mains.css">
+        <title>MordhauForge</title>
+    </head>
+
+    <body>
+        <div id="app-title">
+            <img src="./content/mordhauforge_full.png" alt="MordhauForge" style="width:80%">
+        </div>
+        <div class="column">
+            <div class="highlightbox">
+                <h3>Client</h3>
+                <div class="column-contents">
+                    <button class="button" id="importMap">Import Map</button> 
+                    <button class="button">Download Maps</button> 
+                </div>
+            </div>
+        </div>
+        <div class="column">
+            <div class="highlightbox">
+                <h3>Server</h3>
+                <div class="column-contents">
+                        <button class="button">Install Server</button>   
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script>
+        // Dependencies
+        const electron = require("electron")
+        const {dialog} = electron.remote;
+
+        const {ipcRenderer} = electron;
+
+        // Update Functions
+        function openImportWindow() {
+            ipcRenderer.send('open:import');
+        }
+
+        document.getElementById("importMap").addEventListener("click", () => {
+            ipcRenderer.send('open:import');
+        });
+
+    </script>
+
+</html>
