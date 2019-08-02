@@ -47,14 +47,21 @@ ipcMain.on('open-file-dialog', function (event) {
 ipcMain.on('open:import', function(e) {
     mainWindow.webContents.send('open:import');
 
-    importWindow = new BrowserWindow({
-        webPreferences: {
-            nodeIntegration: true
-        },
-        backgroundColor: '#1E1E1E',
-    });
-    importWindow.loadURL(url.format({
-        pathname: path.join(__dirname, 'importMap.html'),
+    mainWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'mapUtility.html'),
+        protocol: 'file:',
+        slashes: true,
+        width: 200,
+        height: 500,
+    })); 
+    
+});
+
+ipcMain.on('open:home', function(e) {
+    mainWindow.webContents.send('open:home');
+
+    mainWindow.loadURL(url.format({
+        pathname: path.join(__dirname, 'mainWindow.html'),
         protocol: 'file:',
         slashes: true,
         width: 200,

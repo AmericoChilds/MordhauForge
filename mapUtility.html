@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+    <head>
+        <link rel="stylesheet" href="./mapUtility.css">
+        <link rel="stylesheet" href="./universal.css">
+        <div id="app-title">
+            <img src="./content/mordhauforge_full.png" alt="MordhauForge" style="width:80%">
+        </div>
+        <button class="button" id="home">Home</button> <br/>
+    </head>
+
+    <body>
+        
+
+        <button class="collapsible">Settings</button>
+        <div class="content">
+            <input type="checkbox" name="vehicle1" value="Bike">test<br>
+            <input type="checkbox" name="vehicle1" value="Bike">test<br>
+            <input type="checkbox" name="vehicle1" value="Bike">test<br>
+        </div>
+
+
+    </body>
+    <script>
+
+
+
+        var coll = document.getElementsByClassName("collapsible");
+        var i;
+
+        for (i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function() {
+            this.classList.toggle("active");
+            var content = this.nextElementSibling;
+            if (content.style.display === "block") {
+            content.style.display = "none";
+            } else {
+            content.style.display = "block";
+            }
+        });
+        }
+
+    </script>
+
+</html>

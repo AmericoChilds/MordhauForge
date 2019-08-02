@@ -1,0 +1,17 @@
+element.style {
+    background: #474747;
+}
+
+body {
+    align-items: center;
+    justify-content: center;
+
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    color: #ffff;
+}
+
+.check-column {
+    float: left;
+    width: 50%;
+}
