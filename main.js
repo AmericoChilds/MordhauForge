@@ -39,6 +39,11 @@ app.on('ready', function(){
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     Menu.setApplicationMenu(mainMenu);
 
+});
+
+// Hooks
+ipcMain.on('open:import', async (e) => {
+    
     var d = '';
 
     async function Testing() {
@@ -46,15 +51,13 @@ app.on('ready', function(){
          console.log(d);
     }
 
-    Testing();
+    await Testing();
 
-    
+    e.reply("open:import-reply", d);
+
 });
 
-// Hooks
-ipcMain.on('open:import', function(e) {
-    mainWindow.webContents.send('open:import');
-
+ipcMain.on('open:map', async (e) => {
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'mapUtility.html'),
         protocol: 'file:',
@@ -62,7 +65,6 @@ ipcMain.on('open:import', function(e) {
         width: 200,
         height: 500,
     })); 
-    
 });
 
 ipcMain.on('open:home', function(e) {

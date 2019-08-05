@@ -19,26 +19,57 @@
             <input type="checkbox" name="vehicle1" value="Bike">test<br>
             <input type="checkbox" name="vehicle1" value="Bike">test<br>
         </div>
+        <div id="mapcontent">
+
+        </div>
 
 
     </body>
     <script>
 
+        const electron = require("electron")
+        const {dialog} = electron.remote;
 
+        const {ipcRenderer} = electron;
+
+        var mapData = {};
+
+        function refreshData() {
+            ipcRenderer.send('open:import');
+        }
+
+        function updateRender() {
+            var s = '';
+
+            for( var i = 0; i < mapData.length; i++) {
+                s = s + "</br><b>" + mapData[i]["_doc"].name + "</b>";
+            }
+
+            return s;
+        }
+
+        ipcRenderer.on('open:import-reply', (event, arg) => {
+            console.log(arg[1]);
+            mapData = arg;
+
+            document.getElementById("mapcontent").outerHTML = updateRender();
+        })
+
+        refreshData();
 
         var coll = document.getElementsByClassName("collapsible");
         var i;
 
         for (i = 0; i < coll.length; i++) {
-        coll[i].addEventListener("click", function() {
-            this.classList.toggle("active");
-            var content = this.nextElementSibling;
-            if (content.style.display === "block") {
-            content.style.display = "none";
-            } else {
-            content.style.display = "block";
-            }
-        });
+            coll[i].addEventListener("click", function() {
+                this.classList.toggle("active");
+                var content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                content.style.display = "none";
+                } else {
+                content.style.display = "block";
+                }
+            });
         }
 
     </script>

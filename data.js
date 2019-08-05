@@ -14,8 +14,8 @@ module.exports = {
         const newMap = new MapSchema({
             name: "BezerkerArena",
             author: "Gamer",
-            banner: "",
-            url:    ""
+            banner: "https://i.imgur.com/c0RctvP.jpg",
+            url:    "https://i.imgur.com/c0RctvP.jpg"
         })
         await newMap.save();
     }

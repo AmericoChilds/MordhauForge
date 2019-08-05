@@ -39,6 +39,8 @@
 
             const {ipcRenderer} = electron;
 
+            var mapData = {};
+
             const fs = require("fs");
             const unzipper = require("unzipper");
             // Strings for utilization
@@ -59,6 +61,8 @@
 
                 document.getElementById("mapLocation").innerHTML = i;
             }
+
+            
             // Utility
             function sendError(t) {
                 if( t == "noLocation" ) {
@@ -71,6 +75,7 @@
             // Initialiation
             updateDestination();
             updateMapLocation();
+            setTimeout(refreshData(), 3000);
 
             document.getElementById("btn-choosedest").addEventListener("click", () => {
 
