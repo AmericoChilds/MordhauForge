@@ -9,8 +9,12 @@
   "author": "NovusNova",
   "license": "MIT",
   "dependencies": {
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "download": "^7.1.0",
     "electron": "^5.0.7",
+    "mongoose": "^5.6.8",
+    "morgan": "^1.9.1",
     "unzipper": "^0.10.1"
   }
 }

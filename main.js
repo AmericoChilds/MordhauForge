@@ -2,6 +2,10 @@ const electron = require('electron');
 const url = require('url');
 const path = require('path');
 
+const mongoose = require('mongoose');
+const db = require('./config/keys').mongoURI;
+const data = require('./data');
+
 const {app, BrowserWindow, Menu, ipcMain, dialog} = electron;
 
 ///===============///
@@ -10,7 +14,13 @@ const {app, BrowserWindow, Menu, ipcMain, dialog} = electron;
 
 let mainWindow;
 
+// Main Window
 app.on('ready', function(){
+
+    mongoose
+        .connect(db)
+        .then( () => console.log( 'MongoDB Connected..') )
+        .catch(err => console.log( err ) )
 
     mainWindow = new BrowserWindow({
         webPreferences: {
@@ -29,19 +39,17 @@ app.on('ready', function(){
     const mainMenu = Menu.buildFromTemplate(mainMenuTemplate);
     Menu.setApplicationMenu(mainMenu);
 
-});
+    var d = '';
 
-ipcMain.on("changeDir:Map", function(dir) {
+    async function Testing() {
+         d = await data.getMaps();
+         console.log(d);
+    }
+
+    Testing();
+
     
 });
-
-ipcMain.on('open-file-dialog', function (event) {
-  dialog.showOpenDialog({
-    properties: ['openFile']
-  }, function (files) {
-    if (files) event.sender.send('selected-file', files)
-  })
-})
 
 // Hooks
 ipcMain.on('open:import', function(e) {
