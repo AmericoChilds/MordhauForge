@@ -15,10 +15,13 @@
 
         <button class="collapsible">Settings</button>
         <div class="content">
-            <input type="checkbox" name="vehicle1" value="Bike">test<br>
-            <input type="checkbox" name="vehicle1" value="Bike">test<br>
-            <input type="checkbox" name="vehicle1" value="Bike">test<br>
+            <div class="contentColl">
+                <b id="destinationString"></b><br/>
+                <input type="checkbox" name="vehicle1" value="Bike">test<br/>
+                <input type="checkbox" name="vehicle1" value="Bike">test<br/>
+            </div>
         </div>
+        </br>
         <div id="mapcontent">
 
         </div>
@@ -33,29 +36,60 @@
         const {ipcRenderer} = electron;
 
         var mapData = {};
+        var contentFolder = "\\Mordhau\\Content\\Mordhau";
+        var mordhaudir = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Mordhau";
+        var installSecondary = null;
 
+        /// Utility Functions
         function refreshData() {
             ipcRenderer.send('open:import');
+        }
+
+        function updateDestination() {
+            document.getElementById("destinationString").innerHTML = mordhaudir;
         }
 
         function updateRender() {
             var s = '';
 
             for( var i = 0; i < mapData.length; i++) {
-                s = s + "</br><b>" + mapData[i]["_doc"].name + "</b>";
+                s = s + "</br><div class='mapTitle'><b>" + mapData[i]["_doc"].name + "</b></div>";
+                s = s + "<div class='mapBanner'><img src='"+mapData[i]["_doc"].banner+"' class='mapBannerIMG'> </div>";
+                s = s + "<div class='mapUtil'><button class='mapInstall' id='install" + i + "'>Install</button>"
+                s = s + "<b>Version: " + mapData[i]["_doc"].version + " | Author: " + mapData[i]["_doc"].author + "</b> </div>";
             }
 
             return s;
         }
 
+        document.getElementById("home").addEventListener("click", (e) => {
+            ipcRenderer.send('open:home');
+        });
+
+        document.getElementById("home").addEventListener("change", (e) => {
+            ipcRenderer.send('open:home');
+        });
+
+
+        /// IpcRenderers
+
+        // Import
         ipcRenderer.on('open:import-reply', (event, arg) => {
             console.log(arg[1]);
             mapData = arg;
 
             document.getElementById("mapcontent").outerHTML = updateRender();
         })
+        //
 
+
+        /// Initialization
         refreshData();
+        updateDestination();
+
+        //////////////////
+        ///  Collapse  ///
+        //////////////////
 
         var coll = document.getElementsByClassName("collapsible");
         var i;
