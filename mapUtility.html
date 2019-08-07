@@ -12,13 +12,22 @@
 
     <body>
         
-
         <button class="collapsible">Settings</button>
         <div class="content">
             <div class="contentColl">
-                <b id="destinationString"></b><br/>
-                <input type="checkbox" name="vehicle1" value="Bike">test<br/>
-                <input type="checkbox" name="vehicle1" value="Bike">test<br/>
+                <div class="settingsDiv">
+                    <b class="smallTitle">Mordhau Folder:</b><br/>
+                    <b id="destinationString"></b><br/>
+                    <button id="destinationButton">Browse</button><br/>
+                </div>
+                <div class="settingsDiv">
+                    <div id="secondinstallDiv">
+                        <input type="checkbox" id="installSecondaryBox">Install to Secondary Folder<br/>
+                    </div>
+                    <b class="smallTitle">Secondary Folder:</b><br/>
+                    <b id="destinationStringSec"></b><br/>
+                    <button id="destinationButtonSec">Browse</button><br/>
+                </div>
             </div>
         </div>
         </br>
@@ -38,6 +47,7 @@
         var mapData = {};
         var contentFolder = "\\Mordhau\\Content\\Mordhau";
         var mordhaudir = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Mordhau";
+        var installSecDirBool = false;
         var installSecondary = null;
 
         /// Utility Functions
@@ -47,6 +57,11 @@
 
         function updateDestination() {
             document.getElementById("destinationString").innerHTML = mordhaudir;
+            if ( installSecondary == null ) {
+                document.getElementById("destinationStringSec").innerHTML = "No Directory Selected";
+            } else {
+                document.getElementById("destinationStringSec").innerHTML = installSecondary;
+            }
         }
 
         function updateRender() {
@@ -66,10 +81,37 @@
             ipcRenderer.send('open:home');
         });
 
-        document.getElementById("home").addEventListener("change", (e) => {
-            ipcRenderer.send('open:home');
+        document.getElementById("installSecondaryBox").addEventListener("change", (e) => {
+            if ( installSecDirBool == false ) {
+                installSecDirBool = true;
+                console.log(installSecDirBool);
+            } else {
+                installSecDirBool = false;
+                console.log(installSecDirBool);
+            }
         });
 
+        document.getElementById("destinationButton").addEventListener("click", () => {
+
+            dialog.showOpenDialog({ properties: ['openDirectory'] }, function(dir) {
+                if( dir != undefined ) {
+                    mordhaudir = dir[0];
+                }
+                updateDestination();
+            });
+
+        }, false);
+
+        document.getElementById("destinationButtonSec").addEventListener("click", () => {
+
+        dialog.showOpenDialog({ properties: ['openDirectory'] }, function(dir) {
+            if( dir != undefined ) {
+                installSecondary = dir[0];
+            }
+            updateDestination();
+        });
+
+        }, false);
 
         /// IpcRenderers
 

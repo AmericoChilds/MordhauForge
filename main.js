@@ -27,8 +27,8 @@ app.on('ready', function(){
             nodeIntegration: true
         },
         backgroundColor: '#1E1E1E',
-        width: 350,
-        height: 500,
+        width: 500,
+        height: 800,
     });
     mainWindow.loadURL(url.format({
         pathname: path.join(__dirname, 'mainWindow.html'),

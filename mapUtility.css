@@ -9,6 +9,17 @@ body {
     font-family: 'Open Sans', sans-serif;
     text-align: center;
     color: #ffff;
+    font-weight: 400;
+}
+
+b {
+    align-items: center;
+    justify-content: center;
+
+    font-family: 'Open Sans', sans-serif;
+    text-align: center;
+    color: #ffff;
+    font-weight: 400;
 }
 
 .check-column {
@@ -21,7 +32,7 @@ body {
 }
 
 .mapTitle {
-    background-color: #373737;
+    background-color: #686868;
 }
 
 .mapBanner {
@@ -38,7 +49,7 @@ body {
 
 .mapUtil {
     align-items: center;
-    padding-top: 3px;
+    padding-top: 5px;
     padding-bottom: 5px;
     background-color: #373737;
 }
@@ -46,4 +57,22 @@ body {
 .mapInstall {
     float: left;
     margin-left: 2px;
+}
+
+.smallTitle {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.settingsDiv {
+    margin-top: 5px;
+    margin-bottom: 5px;
+    background-color: #474747;
+    overflow: hidden;
+    padding: 5px;
+}
+
+#secondinstallDiv {
+    background-color: #FF8300;
+    margin-bottom: 3px;
 }
