@@ -46,7 +46,11 @@
 
         const download = require('download');
 
+        const fs = require("fs");
+        const unzipper = require("unzipper");
+
         var mapData = {};
+        var mapStatus = {};
         var contentFolder = "\\Mordhau\\Content\\Mordhau";
         var mordhaudir = "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Mordhau";
         var installSecDirBool = false;
@@ -72,8 +76,12 @@
             for( var i = 0; i < mapData.length; i++) {
                 s = s + "</br><div class='mapTitle'><b>" + mapData[i]["_doc"].name + "</b></div>";
                 s = s + "<div class='mapBanner'><img src='"+mapData[i]["_doc"].banner+"' class='mapBannerIMG'> </div>";
-                s = s + "<div class='mapUtil'><button class='mapInstall' id='install" + i + "'>Install</button>"
+                s = s + "<div class='mapUtil' id='util" + i + "'><button class='mapInstall' id='install" + i + "'>Install</button>"
                 s = s + "<b>Version: " + mapData[i]["_doc"].version + " | Author: " + mapData[i]["_doc"].author + "</b> </div>";
+                    
+                mapStatus[i] = {}
+                mapStatus[i].install = false;
+                mapStatus[i].outdated = false;
             }
 
             return s;
@@ -81,18 +89,22 @@
 
         function installsInit() {
             for (var i = 0; i < mapData.length; i++){
-
-                console.log(i);
                 
                 (function () {
 
                     var k = "install" + i;
                     var u = mapData[i]["_doc"].url;
+                    var g = i;
                     
-                    console.log(k);
 
                     document.getElementById(k).addEventListener("click", (e) => {       
-                        downloadMap(u);
+                        if( mapStatus[g].install == false ) {
+                            // Downloads map and sets install var to true
+                            downloadMap(u, g);
+                        } else {
+                            // Uninstalls map and sets install var to false
+                            uninstallMap(g);
+                        }
                     });
 
                 }());
@@ -100,14 +112,35 @@
             }
         }
 
-        function downloadMap( l ) {
+        function downloadMap( l, i ) {
             download(l, 'maps').then(() => {
-                console.log('downloaded file');
+                document.getElementById("util" + i).style.backgroundColor = "green"; 
+                document.getElementById("install" + i).innerHTML = "Uninstall";
+                mapStatus[i].install = true;
             });
+            installMap(i);
         }
 
-        function installMap() {
-            
+        function installMap(i) {
+            // Split url string to get exact name
+            var d = mapData[i]["_doc"].url.split("/");
+            var str = d[d.length - 1];
+            // Grab the extension of the string
+            var ext =  str.substring(str.length - 3);
+            // If the extension equals 'zip' then continue
+            if ( ext == "zip" ) {
+                // Grabs the downloaded file and extracts it to desired location(s)
+                fs.createReadStream("maps/" + str).pipe(unzipper.Extract({ path: mordhaudir }));
+                if ( installSecDirBool == true && installSecondary != null ) {
+                    fs.createReadStream("maps/" + str).pipe(unzipper.Extract({ path: installSecondary }));
+                }
+            }
+        }
+
+        function uninstallMap( i ) {
+            document.getElementById("install" + i).innerHTML = "Install";
+            document.getElementById("util" + i).style.backgroundColor = "#373737";
+            mapStatus[i].install = false;
         }
 
         // Hooks
