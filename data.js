@@ -5,8 +5,8 @@ module.exports = {
     getMaps: async (req, res, next ) => {
         
         const maps = await MapSchema.find();
-
         return maps;
+        
     },
 
     /*

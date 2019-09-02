@@ -31,6 +31,12 @@ const MapSchema = new Schema( {
         default:    ''
     },
 
+    zip: {
+        type:       String,
+        default:    '',
+        required:   true
+    },
+
     version: {
         type:       String,
         default:    "1.0.0"

@@ -49,6 +49,8 @@
         const fs = require("fs");
         const unzipper = require("unzipper");
 
+        var rimraf = require("rimraf");
+
         var mapData = {};
         var mapStatus = {};
         var contentFolder = "\\Mordhau\\Content\\Mordhau";
@@ -70,18 +72,24 @@
             }
         }
 
+        /////////////////
+        ///   Style   ///
+        /////////////////
+
         function updateRender() {
             var s = '';
 
             for( var i = 0; i < mapData.length; i++) {
                 s = s + "</br><div class='mapTitle'><b>" + mapData[i]["_doc"].name + "</b></div>";
-                s = s + "<div class='mapBanner'><img src='"+mapData[i]["_doc"].banner+"' class='mapBannerIMG'> </div>";
+                s = s + "<div class='mapBanner'><img src='"+ mapData[i]["_doc"].banner +"' class='mapBannerIMG'> </div>";
                 s = s + "<div class='mapUtil' id='util" + i + "'><button class='mapInstall' id='install" + i + "'>Install</button>"
                 s = s + "<b>Version: " + mapData[i]["_doc"].version + " | Author: " + mapData[i]["_doc"].author + "</b> </div>";
                     
                 mapStatus[i] = {}
                 mapStatus[i].install = false;
                 mapStatus[i].outdated = false;
+
+                checkStatus(i, true);
             }
 
             return s;
@@ -91,7 +99,7 @@
             for (var i = 0; i < mapData.length; i++){
                 
                 (function () {
-
+                    // Grabs the id of the button
                     var k = "install" + i;
                     var u = mapData[i]["_doc"].url;
                     var g = i;
@@ -112,6 +120,19 @@
             }
         }
 
+        function checkStatus(i, a) {
+            var path = mordhaudir + contentFolder + "\\" + mapData[i]["_doc"].zip;
+            var vers = path + "\\MapVersion.txt";
+            console.log(path);
+            if ( fs.existsSync(path) ) {
+                // If the function is called and we want to set the install and version vars
+                if ( a == true ) {
+                    mapStatus[i].install = true;
+                }
+            }
+
+        }
+
         function downloadMap( l, i ) {
             download(l, 'maps').then(() => {
                 document.getElementById("util" + i).style.backgroundColor = "green"; 
@@ -128,6 +149,7 @@
             // Grab the extension of the string
             var ext =  str.substring(str.length - 3);
             // If the extension equals 'zip' then continue
+            console.log(str);
             if ( ext == "zip" ) {
                 // Grabs the downloaded file and extracts it to desired location(s)
                 fs.createReadStream("maps/" + str).pipe(unzipper.Extract({ path: mordhaudir }));
@@ -140,6 +162,13 @@
         function uninstallMap( i ) {
             document.getElementById("install" + i).innerHTML = "Install";
             document.getElementById("util" + i).style.backgroundColor = "#373737";
+            // Delete folder
+
+            var path = mordhaudir + contentFolder + mapData[i]["_doc"].zip;
+            if (fs.existsSync(path)) {
+                rimraf(path, function () { console.log("done"); });
+            }
+                
             mapStatus[i].install = false;
         }
 
