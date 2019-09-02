@@ -51,6 +51,8 @@
 
         var rimraf = require("rimraf");
 
+        mainApp = require('electron').remote.app
+
         var mapData = {};
         var mapStatus = {};
         var contentFolder = "\\Mordhau\\Content\\Mordhau";
@@ -150,9 +152,9 @@
             var ext =  str.substring(str.length - 3);
             // If the extension equals 'zip' then continue
             console.log(str);
-            if ( ext == "zip" ) {
+            if ( ext == "zip" || ext == "l=1" ) {
                 // Grabs the downloaded file and extracts it to desired location(s)
-                fs.createReadStream("maps/" + str).pipe(unzipper.Extract({ path: mordhaudir }));
+                fs.createReadStream("maps/" + mapData[i]["_doc"].zip + ".zip").pipe(unzipper.Extract({ path: mordhaudir }));
                 if ( installSecDirBool == true && installSecondary != null ) {
                     fs.createReadStream("maps/" + str).pipe(unzipper.Extract({ path: installSecondary }));
                 }
@@ -163,12 +165,12 @@
             document.getElementById("install" + i).innerHTML = "Install";
             document.getElementById("util" + i).style.backgroundColor = "#373737";
             // Delete folder
-
+            /*
             var path = mordhaudir + contentFolder + mapData[i]["_doc"].zip;
             if (fs.existsSync(path)) {
                 rimraf(path, function () { console.log("done"); });
             }
-                
+                */
             mapStatus[i].install = false;
         }
 
