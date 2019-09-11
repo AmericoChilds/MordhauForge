@@ -65,6 +65,14 @@
             ipcRenderer.send('open:import');
         }
 
+        function initializeVersison( dir, vers ) {
+            fs.writeFile( mordhaudir + contentFolder + "\\" + dir + "\\MapVersion.txt", vers, (err) => {
+                if (err) throw err;
+
+                console.log("Initialized version " + vers + " for " + dir );
+            })
+        }
+
         function updateDestination() {
             document.getElementById("destinationString").innerHTML = mordhaudir;
             if ( installSecondary == null ) {
@@ -165,12 +173,12 @@
             document.getElementById("install" + i).innerHTML = "Install";
             document.getElementById("util" + i).style.backgroundColor = "#373737";
             // Delete folder
-            /*
+            
             var path = mordhaudir + contentFolder + mapData[i]["_doc"].zip;
             if (fs.existsSync(path)) {
                 rimraf(path, function () { console.log("done"); });
             }
-                */
+                
             mapStatus[i].install = false;
         }
 
