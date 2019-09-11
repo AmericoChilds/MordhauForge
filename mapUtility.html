@@ -163,6 +163,7 @@
         function installMap(i) {
             // Split url string to get exact name
             var d = mapData[i]["_doc"].url.split("/");
+            // Grab last element split by "/"
             var str = d[d.length - 1];
             // Grab the extension of the string
             var ext =  str.substring(str.length - 3);
