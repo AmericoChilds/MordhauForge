@@ -66,6 +66,7 @@
         }
 
         function initializeVersison( dir, vers ) {
+            // Default C:\\Program Files (x86)\\Steam\\steamapps\\common\\Mordhau\\\\Mordhau\\Content\\Mordhau\\MapDir\\MapVersion.txt
             fs.writeFile( mordhaudir + contentFolder + "\\" + dir + "\\MapVersion.txt", vers, (err) => {
                 if (err) throw err;
 
@@ -90,15 +91,16 @@
             var s = '';
 
             for( var i = 0; i < mapData.length; i++) {
+                // HTML and CSS styling for every map
                 s = s + "</br><div class='mapTitle'><b>" + mapData[i]["_doc"].name + "</b></div>";
                 s = s + "<div class='mapBanner'><img src='"+ mapData[i]["_doc"].banner +"' class='mapBannerIMG'> </div>";
                 s = s + "<div class='mapUtil' id='util" + i + "'><button class='mapInstall' id='install" + i + "'>Install</button>"
                 s = s + "<b>Version: " + mapData[i]["_doc"].version + " | Author: " + mapData[i]["_doc"].author + "</b> </div>";
-                    
+                // Initialize variables for each map
                 mapStatus[i] = {}
                 mapStatus[i].install = false;
                 mapStatus[i].outdated = false;
-
+                // Check the status of every Map (whether it's installed or outdated)
                 checkStatus(i, true);
             }
 
@@ -131,7 +133,9 @@
         }
 
         function checkStatus(i, a) {
+            // Map path
             var path = mordhaudir + contentFolder + "\\" + mapData[i]["_doc"].zip;
+            // Path to version file
             var vers = path + "\\MapVersion.txt";
             console.log(path);
             if ( fs.existsSync(path) ) {
@@ -144,11 +148,15 @@
         }
 
         function downloadMap( l, i ) {
+            // Install map to directory through argument
             download(l, 'maps').then(() => {
+                // Change CSS
                 document.getElementById("util" + i).style.backgroundColor = "green"; 
                 document.getElementById("install" + i).innerHTML = "Uninstall";
+                // Flip install flag
                 mapStatus[i].install = true;
             });
+            // Call install map function
             installMap(i);
         }
 
@@ -172,10 +180,11 @@
         function uninstallMap( i ) {
             document.getElementById("install" + i).innerHTML = "Install";
             document.getElementById("util" + i).style.backgroundColor = "#373737";
-            // Delete folder
-            
+    
+            // Directory of the map
             var path = mordhaudir + contentFolder + mapData[i]["_doc"].zip;
             if (fs.existsSync(path)) {
+                // Delete the files
                 rimraf(path, function () { console.log("done"); });
             }
                 
@@ -184,6 +193,7 @@
 
         // Hooks
         document.getElementById("home").addEventListener("click", (e) => {
+            // Open mainWindow.html
             ipcRenderer.send('open:home');
         });
 
